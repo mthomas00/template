@@ -1,7 +1,5 @@
 FROM ubuntu
 
-RUN 
-
 RUN apt-get update \
     && apt-get install wget --yes \
     && apt-get install software-properties-common --yes \
@@ -34,23 +32,20 @@ RUN rm -f conda.sh \
     && /root/miniconda3/bin/conda init bash
 ############### install Conda
 
-ARG ROOT_NAME=project
+COPY setup/conda_env.yaml conda_env.yaml
+# # https://stackoverflow.com/questions/20635472/using-the-run-instruction-in-a-dockerfile-with-source-does-not-work
+RUN /root/miniconda3/bin/conda env create -f conda_env.yaml
 
-COPY . /$ROOT_NAME
-WORKDIR /$ROOT_NAME
-
-RUN git submodule init && \
-    git submodule update
-
-RUN Rscript setup/setup_r.r
-
-# https://stackoverflow.com/questions/20635472/using-the-run-instruction-in-a-dockerfile-with-source-does-not-work
-RUN /root/miniconda3/bin/conda env create -f setup/conda_env.yaml
-RUN rm paper_slides/output/slides.pdf paper_slides/output/text.pdf
-
-# https://stackoverflow.com/questions/61915607/commandnotfounderror-your-shell-has-not-been-properly-configured-to-use-conda
+# # https://stackoverflow.com/questions/61915607/commandnotfounderror-your-shell-has-not-been-properly-configured-to-use-conda
 SHELL ["/bin/bash", "-c"]
-WORKDIR /$ROOT_NAME
-RUN source /root/miniconda3/etc/profile.d/conda.sh \
+
+ARG PROJECT_DIR
+RUN mkdir /tmp/$PROJECT_DIR
+WORKDIR /tmp/$PROJECT_DIR
+
+CMD git submodule init \
+    && git submodule update \
+    && Rscript setup/setup_r.r \
+    && source /root/miniconda3/etc/profile.d/conda.sh \
     && conda activate $(cat setup/conda_env.yaml | head -1 | awk '{print $2}') \
     && python3 run_all.py
