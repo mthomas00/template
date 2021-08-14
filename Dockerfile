@@ -1,27 +1,19 @@
 FROM ubuntu
 
-RUN apt-get update \
-    && apt-get install wget --yes \
-    && apt-get install software-properties-common --yes \
-    && apt-get install curl --yes
+RUN apt update \
+    && apt install wget --yes \
+    && apt install software-properties-common --yes \
+    && apt install curl --yes
 
 ############### install Git
-RUN apt-get install git --yes \
-    && apt-get install git-lfs --yes
+RUN apt install git --yes \
+    && apt install git-lfs --yes
 ############### install Git
-
-############### install R
-# instructions from https://cran.r-project.org/bin/linux/ubuntu/
-RUN apt-get install --no-install-recommends software-properties-common dirmngr \
-    && wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | tee -a /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc \
-    && add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/" \
-    && apt-get install --no-install-recommends --yes r-base
-############### install R
 
 ############### install LyX
 # instructions from https://wiki.lyx.org/LyX/LyXOnUbuntu
-RUN add-apt-repository ppa:lyx-devel/release --yes && \
-    apt-get install lyx --yes
+RUN add-apt-repository ppa:lyx-devel/release --yes \
+    && apt install lyx --yes
 ############### install LyX
 
 ############### install Conda
@@ -45,7 +37,7 @@ WORKDIR /tmp/$PROJECT_DIR
 
 CMD git submodule init \
     && git submodule update \
-    && Rscript setup/setup_r.r \
     && source /root/miniconda3/etc/profile.d/conda.sh \
     && conda activate $(cat setup/conda_env.yaml | head -1 | awk '{print $2}') \
+    && Rscript setup/setup_r.r \
     && python3 run_all.py
