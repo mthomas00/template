@@ -1,19 +1,20 @@
-FROM ubuntu
+FROM ubuntu:focal
 
-RUN apt update \
-    && apt install wget --yes \
-    && apt install software-properties-common --yes \
-    && apt install curl --yes
+RUN apt-get update \
+    && apt-get install wget --yes \
+    && apt-get install software-properties-common --yes \
+    && apt-get install curl --yes
 
 ############### install Git
-RUN apt install git --yes \
-    && apt install git-lfs --yes
+RUN apt-get install git --yes \
+    && apt-get install git-lfs --yes
 ############### install Git
 
 ############### install LyX
 # instructions from https://wiki.lyx.org/LyX/LyXOnUbuntu
 RUN add-apt-repository ppa:lyx-devel/release --yes \
-    && apt install lyx --yes
+    && apt-get update \
+    && apt-get install lyx --yes
 ############### install LyX
 
 ############### install Conda
@@ -25,19 +26,19 @@ RUN rm -f conda.sh \
 ############### install Conda
 
 COPY setup/conda_env.yaml conda_env.yaml
-# # https://stackoverflow.com/questions/20635472/using-the-run-instruction-in-a-dockerfile-with-source-does-not-work
+# https://stackoverflow.com/questions/20635472/using-the-run-instruction-in-a-dockerfile-with-source-does-not-work
 RUN /root/miniconda3/bin/conda env create -f conda_env.yaml
-
-# # https://stackoverflow.com/questions/61915607/commandnotfounderror-your-shell-has-not-been-properly-configured-to-use-conda
-SHELL ["/bin/bash", "-c"]
 
 ARG PROJECT_DIR
 RUN mkdir /tmp/$PROJECT_DIR
 WORKDIR /tmp/$PROJECT_DIR
 
-CMD git submodule init \
+# https://stackoverflow.com/questions/61915607/commandnotfounderror-your-shell-has-not-been-properly-configured-to-use-conda
+SHELL ["/bin/bash", "-c"]
+
+ENTRYPOINT git submodule init \
     && git submodule update \
     && source /root/miniconda3/etc/profile.d/conda.sh \
-    && conda activate $(cat setup/conda_env.yaml | head -1 | awk '{print $2}') \
+    && conda activate $(conda env list | awk 'NR==4 {print $1}') \
     && Rscript setup/setup_r.r \
-    && python3 run_all.py
+    && bash
