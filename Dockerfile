@@ -50,7 +50,7 @@ RUN apt-get update \
     && apt-get install --yes pip
 
 COPY docker/script.exp /usr/local/${PROG_DIR}/script.exp
-COPY docker/docker.yaml /usr/local/${PROG_DIR}/docker.yaml
+COPY docker/config_docker.yaml /usr/local/${PROG_DIR}/config_docker.yaml
 COPY docker/setup.py /usr/local/${PROG_DIR}/setup.py
 RUN cd /usr/local/${PROG_DIR} \
     && pip install pyyaml \
