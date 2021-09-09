@@ -1,7 +1,7 @@
 import re
 import yaml
 
-YAML_FILE = 'docker.yaml'
+YAML_FILE = 'config_docker.yaml'
 EXPECT_SCRIPT = 'script.exp'
 
 with open(YAML_FILE, 'r') as stream:
