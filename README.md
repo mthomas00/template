@@ -32,12 +32,12 @@ These software are used by the scripts contained in the repository. By default, 
       conda init $(echo $0 | cut -d'-' -f 2)
       ```
 
-3. Create conda environment with the command (non-ARM Mac, e.g. M1 Mac):
+3. Create conda environment with the command (Intel Mac):
       ```
       conda env create -f setup/conda_env.yaml
       ```
    
-   For M1 Macs (ARM architecture) this command should be replaced with:
+   For M1 Macs (ARM Mac, e.g., M1, M2) this command should be replaced with:
    ```
    CONDA_SUBDIR=osx-64 conda env create -f setup/conda_env.yaml 
    ```
