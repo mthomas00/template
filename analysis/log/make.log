@@ -1,19 +1,19 @@
 --------------------------------------------------------------------------------
-Makelog started: 2022-10-07 04:12:19
-Working directory: /Users/michaelthomas/Documents/gitrepo2/template/analysis
+Makelog started: 2024-10-31 10:03:23
+Working directory: /Users/mt4bq/Library/CloudStorage/OneDrive-UniversityofMissouri/Documents/gitprojects/template/analysis
 --------------------------------------------------------------------------------
 Input links successfully created!
 External links successfully created!
 Source logs successfully written!
 WARNING! The following target files have been modified according to git status:
-/Users/michaelthomas/Documents/gitrepo2/template/data/output/data_cleaned.csv
-Executing command: `python3  "/Users/michaelthomas/Documents/gitrepo2/template/analysis/code/analyze_data.py" `
-/opt/homebrew/Caskroom/miniconda/base/envs/template/lib/python3.7/site-packages/linearmodels/shared/exceptions.py:35: MissingValueWarning: 
+/Users/mt4bq/Library/CloudStorage/OneDrive-UniversityofMissouri/Documents/gitprojects/template/data/output/data_cleaned.csv
+Executing command: `python  "/Users/mt4bq/Library/CloudStorage/OneDrive-UniversityofMissouri/Documents/gitprojects/template/analysis/code/analyze_data.py" `
+/Users/mt4bq/.conda/envs/template/lib/python3.10/site-packages/linearmodels/panel/model.py:1260: MissingValueWarning: 
 Inputs contain missing values. Dropping rows with missing observations.
-  warnings.warn(missing_value_warning_msg, MissingValueWarning)
+  super().__init__(dependent, exog, weights=weights, check_rank=check_rank)
 
 Output logs successfully written!
 --------------------------------------------------------------------------------
-Makelog ended: 2022-10-07 04:12:23
-Working directory: /Users/michaelthomas/Documents/gitrepo2/template/analysis
+Makelog ended: 2024-10-31 10:03:30
+Working directory: /Users/mt4bq/Library/CloudStorage/OneDrive-UniversityofMissouri/Documents/gitprojects/template/analysis
 --------------------------------------------------------------------------------

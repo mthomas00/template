@@ -1,6 +1,6 @@
-#LyX 2.3 created this file. For more info see http://www.lyx.org/
+#LyX 2.4 created this file. For more info see https://www.lyx.org/
 
-\lyxformat 544
+\lyxformat 620
 
 \begin_document
 
@@ -14,15 +14,15 @@
 
 \use_default_options true
 
-\maintain_unincluded_children false
+\maintain_unincluded_children no
 
 \language english
 
 \language_package default
 
-\inputencoding auto
+\inputencoding auto-legacy
 
-\fontencoding global
+\fontencoding auto
 
 \font_roman "default" "default"
 
@@ -38,7 +38,11 @@
 
 \font_sc false
 
-\font_osf false
+\font_roman_osf false
+
+\font_sans_osf false
+
+\font_typewriter_osf false
 
 \font_sf_scale 100 100
 
@@ -66,7 +70,7 @@
 
 \use_hyperref false
 
-\papersize letterpaper
+\papersize letter
 
 \use_geometry true
 
@@ -108,7 +112,11 @@
 
 \use_refstyle 0
 
+\use_formatted_ref 0
+
 \use_minted 0
+
+\use_lineno 0
 
 \index Index
 
@@ -148,15 +156,25 @@
 
 \paperpagestyle default
 
+\tablestyle default
+
 \tracking_changes false
 
 \output_changes false
+
+\change_bars false
+
+\postpone_fragile_content false
 
 \html_math_output 0
 
 \html_css_as_file 0
 
 \html_be_strict false
+
+\docbook_table_output 0
+
+\docbook_mathml_prefix 1
 
 \end_header
 
@@ -173,6 +191,8 @@
 \begin_inset Float table
 
 placement H
+
+alignment document
 
 wide false
 
@@ -442,7 +462,9 @@ Post-TV
 
 \size footnotesize
 
-Note: Table notes
+Note:
+
+ Table notes
 
 \end_layout
 
