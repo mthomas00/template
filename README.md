@@ -120,6 +120,8 @@ Then, proceed to rebuild the environment.
    Once these commands have run to completion, the `/lib/gslab_make` folder should be populated with `gslab_make`. For users with `miniconda`, proceed to step 7.
 
    Note that the submodules can be updated with the command `git submodule update --remote`.
+
+   Note that when creating a new repository from template on GitHub, the files are often in a staged status which prevents the submodule from initiating. To fix this, enter `git restore . --staged`.
    
 
 7. For users who do not want to install `miniconda`,  follow the instructions in `/setup/dependencies.md` to manually download all required dependencies. Ensure you download the correct versions of these packages. Proceed to step 7.
