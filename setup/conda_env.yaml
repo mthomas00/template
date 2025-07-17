@@ -1,9 +1,9 @@
-name: template #CHANGE for your project
+name: template
 channels:
   - conda-forge
 dependencies:
   - python=3.10
-  - pyyaml # import python packages by naming them as dependencies and potentially specifying version numbers
+  - pyyaml
   - numpy
   - matplotlib
   - gitpython
@@ -11,15 +11,25 @@ dependencies:
   - colorama
   - jupyter
   - linearmodels
-  # - pip=19
-  # - pip: # if there is a package available via pip but not with conda, can import like this:
-  #     - EXAMPLE_PACKAGE
-  - r=4.2
+  - sentence-transformers
+  - r-base
   - r-data.table
   - r-ggplot2
   - r-Rcpp
   - r-fst
-  - r-fixest
-  - r-zoo
   - r-stringr
+  - r-zoo
+  - r-readr
+  - r-bit
+  - r-bit64
+  - r-R.utils
+  - r-R.methodsS3
+  - r-R.oo
+  - r-future.apply
+  - r-reticulate
+  - r-stringi
+  - r-plyr
+  - r-SnowballC
+  - r-snakecase
+  - r-tidytext
 

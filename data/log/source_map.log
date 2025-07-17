@@ -1,4 +1,4 @@
 destination | source
-input/lib | /Users/mt4bq/Library/CloudStorage/OneDrive-UniversityofMissouri/Documents/gitprojects/template/lib
-input/tv.csv | /Users/mt4bq/Library/CloudStorage/OneDrive-UniversityofMissouri/Documents/gitprojects/template/raw/tv.csv
-input/chips.csv | /Users/mt4bq/Library/CloudStorage/OneDrive-UniversityofMissouri/Documents/gitprojects/template/raw/chips.csv
+input/lib | /Users/onkar/RA/template/lib
+input/tv.csv | /Users/onkar/RA/template/raw/tv.csv
+input/chips.csv | /Users/onkar/RA/template/raw/chips.csv

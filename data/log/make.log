@@ -1,13 +1,13 @@
 --------------------------------------------------------------------------------
-Makelog started: 2024-10-31 10:03:03
-Working directory: /Users/mt4bq/Library/CloudStorage/OneDrive-UniversityofMissouri/Documents/gitprojects/template/data
+Makelog started: 2025-07-17 11:56:15
+Working directory: /Users/onkar/RA/template/data
 --------------------------------------------------------------------------------
 Input links successfully created!
 External links successfully created!
 Source logs successfully written!
-Executing command: `python  "/Users/mt4bq/Library/CloudStorage/OneDrive-UniversityofMissouri/Documents/gitprojects/template/data/code/merge_data.py" `
-Executing command: `python  "/Users/mt4bq/Library/CloudStorage/OneDrive-UniversityofMissouri/Documents/gitprojects/template/data/code/clean_data.py" `
-/Users/mt4bq/Library/CloudStorage/OneDrive-UniversityofMissouri/Documents/gitprojects/template/data/code/clean_data.py:17: FutureWarning: ChainedAssignmentError: behaviour will change in pandas 3.0!
+Executing command: `python  "/Users/onkar/RA/template/data/code/merge_data.py" `
+Executing command: `python  "/Users/onkar/RA/template/data/code/clean_data.py" `
+/Users/onkar/RA/template/data/code/clean_data.py:17: FutureWarning: ChainedAssignmentError: behaviour will change in pandas 3.0!
 You are setting values through chained assignment. Currently this works in certain cases, but when using Copy-on-Write (which will become the default behaviour in pandas 3.0) this will never work to update the original DataFrame or Series, because the intermediate object on which we are setting values will behave as a copy.
 A typical example is when you are setting values in a column of a DataFrame, like:
 
@@ -18,7 +18,7 @@ Use `df.loc[row_indexer, "col"] = values` instead, to perform the assignment in 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
 
   df['chips_sold'][df['chips_sold'] == -999999] = np.nan
-/Users/mt4bq/Library/CloudStorage/OneDrive-UniversityofMissouri/Documents/gitprojects/template/data/code/clean_data.py:17: SettingWithCopyWarning: 
+/Users/onkar/RA/template/data/code/clean_data.py:17: SettingWithCopyWarning: 
 A value is trying to be set on a copy of a slice from a DataFrame
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
@@ -26,6 +26,6 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 
 Output logs successfully written!
 --------------------------------------------------------------------------------
-Makelog ended: 2024-10-31 10:03:23
-Working directory: /Users/mt4bq/Library/CloudStorage/OneDrive-UniversityofMissouri/Documents/gitprojects/template/data
+Makelog ended: 2025-07-17 11:56:21
+Working directory: /Users/onkar/RA/template/data
 --------------------------------------------------------------------------------

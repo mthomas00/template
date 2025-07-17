@@ -1,19 +1,19 @@
 --------------------------------------------------------------------------------
-Makelog started: 2024-10-31 10:03:23
-Working directory: /Users/mt4bq/Library/CloudStorage/OneDrive-UniversityofMissouri/Documents/gitprojects/template/analysis
+Makelog started: 2025-07-17 11:56:21
+Working directory: /Users/onkar/RA/template/analysis
 --------------------------------------------------------------------------------
 Input links successfully created!
 External links successfully created!
 Source logs successfully written!
 WARNING! The following target files have been modified according to git status:
-/Users/mt4bq/Library/CloudStorage/OneDrive-UniversityofMissouri/Documents/gitprojects/template/data/output/data_cleaned.csv
-Executing command: `python  "/Users/mt4bq/Library/CloudStorage/OneDrive-UniversityofMissouri/Documents/gitprojects/template/analysis/code/analyze_data.py" `
-/Users/mt4bq/.conda/envs/template/lib/python3.10/site-packages/linearmodels/panel/model.py:1260: MissingValueWarning: 
+/Users/onkar/RA/template/data/output/data_cleaned.csv
+Executing command: `python  "/Users/onkar/RA/template/analysis/code/analyze_data.py" `
+/opt/anaconda3/envs/template/lib/python3.10/site-packages/linearmodels/panel/model.py:1260: MissingValueWarning: 
 Inputs contain missing values. Dropping rows with missing observations.
   super().__init__(dependent, exog, weights=weights, check_rank=check_rank)
 
 Output logs successfully written!
 --------------------------------------------------------------------------------
-Makelog ended: 2024-10-31 10:03:30
-Working directory: /Users/mt4bq/Library/CloudStorage/OneDrive-UniversityofMissouri/Documents/gitprojects/template/analysis
+Makelog ended: 2025-07-17 11:56:24
+Working directory: /Users/onkar/RA/template/analysis
 --------------------------------------------------------------------------------
