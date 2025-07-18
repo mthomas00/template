@@ -43,101 +43,47 @@ Once you have met these OS and application requirements, [clone a team repositor
 
 ----
 
-### Setup
+## Project Setup
 
-1. Create a `config_user.yaml` file in the root directory. An example can be found in the `/setup` directory. If this step is skipped, the default `config_user.yaml` will be copied over when running `check_setup.py` below. You might skip this step if you do not want not to specify any external paths, or want to use default executable names. See the **[User Configuration](#user-configuration)** section below for further details. 
-
-2. Initialize `git lfs`. From the root of the repository, run:
-
-```
-   git lfs install
-   ./setup/lfs_setup.sh
-   git lfs pull
-``` 
-
-   This will not affect files that ship with the `template` (which use the standard `git` storage). The first command will initialize `git lfs` for usage. The second command will instruct `git lfs` to handle files with extensions such as `.pdf`, `.png`, etc. The third command will download large files from the remote repository to your local computer, if any exist. See [here](https://git-lfs.github.com/) for more  on how to modify your `git lfs` settings.
-
-   Note that it is not required to initialize `git lfs` to work with the files hosted on `template`, but it is highly recommended that you initialize `git lfs` for large file storage by running the script above.
-
-3. If you already have `conda` setup on your local machine, feel free to skip this step. If not, this will install a lightweight version of `conda` that will not interfere with your local `Python` and `R` installations.
-
-  ***NOTE:*** If you do not wish to install `conda`, proceed to steps 6 - 8 (_installing `conda` is recommended_).
-
-   Install [`miniconda`](https://docs.conda.io/en/latest/miniconda.html) to be used to manage the `R`/`Python` virtual environment, if you have not already done this. If you have `homebrew` (which can be download [here](https://brew.sh/)) `miniconda` can be installed as follows:
-
-```
-    brew install --cask miniconda
+### 1. Clone the repository
+```sh
+git clone <repo-url>
+cd <repo-directory>
 ```
 
-  Once you have installed `conda`, you need to initialize `conda` by running the following commands and *restarting your terminal*:
+### 2. Install Miniconda (if not already installed)
+Follow instructions at https://docs.conda.io/en/latest/miniconda.html
 
-```
-    conda config --set auto_activate_base false
-    conda init $(echo $0 | cut -d'-' -f 2)
-```
-
-4. Next, create a `conda` environment with the commands:
-
-```
-    conda config --set channel_priority strict
-    conda env create -f setup/conda_env.yaml
+### 3. Create the conda environment
+```sh
+conda env create -f setup/conda_env.yaml
+conda activate template  # or the environment name specified in conda_env.yaml
 ```
 
-   The default name for the `conda` environment is `template`. This can be changed by editing the first line of `/setup/conda_env.yaml`. To activate the `conda` virtual environment, run:
-
-```
-    conda activate <project_name>
-```
-
-   The `conda` environment should be active throughout setup, and whenever executing modules within the project in the future. You can deactivate the environment with:
-
-  ```
-  conda deactivate <project_name>
-  ``` 
-
-_Please ensure that your `conda` installation is up to date before proceeding_. If you experience issues building your `conda` environment, check the version of your `conda` installation and update it if needed by running:
-
-```
-conda -V
-conda update -n base -c defaults conda
+### 4. Create the R library directory (if not present)
+```sh
+mkdir -p lib/r
 ```
 
-Then, proceed to rebuild the environment.
-
-5. Activate the conda environment and install the R packages that do not install with conda. From the root directory, issue 
-   this command:
-   ```
-   R CMD BATCH --no-save ./setup/setup_r.R ./setup/setup_r.Rout
-   ```
-
-
-6. Fetch `gslab_make` submodule files. We use a [Git submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules) to track our `gslab_make` dependency in the `/lib/gslab_make` folder. After cloning the repository, you will need to initialize and fetch files for the `gslab_make` submodule. One way to do this is to run the following `bash` commands from the root of the repository:
-
-```
-   git submodule init
-   git submodule update
-``` 
-
-   Once these commands have run to completion, the `/lib/gslab_make` folder should be populated with `gslab_make`. For users with `miniconda`, proceed to step 7.
-
-   Note that the submodules can be updated with the command `git submodule update --remote`.
-
-   Note that when using the template to create a new respository from GitHub, the status of many files in the repo are staged which prevents `git submodule init` from working. To fix this, unstage them with `git restore . --staged`
-   
-
-7. For users who do not want to install `miniconda`,  follow the instructions in `/setup/dependencies.md` to manually download all required dependencies. Ensure you download the correct versions of these packages. Proceed to step 7.
-
-8. Run the script `/setup/check_setup.py`. One way to do this is to run the following `bash` command from the `/setup` directory (note that you _must_ be in the `/setup` directory, and you must have local installations of the softwares documented in **[Requirements](#requirements)**. for the script to run successfully):
-
-```
-   python check_setup.py
+### 5. Run the R setup script
+```sh
+Rscript setup/setup_r.R
 ```
 
-9. To build the repository, run the following `bash` command from the root of repository: 
+### 6. Run the project
+```sh
+python run_all.py
+```
 
-   ```
-   python run_all.py
-   ```
+For more details on configuration, see `config_user.yaml`.
+
+## Adding Packages
+- Add Python packages to `setup/conda_env.yaml` under dependencies.
+- Add R packages to `setup/conda_env.yaml` using the `r-` prefix.
+- Only add R packages to `setup/setup_r.R` if they are not available via conda.
+
+## Troubleshooting
+For troubleshooting and advanced configuration, see the [GitHub Wiki](https://github.com/gentzkow/template/wiki).
 
 ----
 
@@ -209,41 +155,6 @@ By default, this `template` is set up to run `Python` scripts. The `template` is
 2. Copy contents of `/extensions/stata/analysis/code` to `/analysis/code` and contents of `/extensions/stata/data/code` to `/data/code`.
 3. Copy `.ado` dependencies from `/extensions/stata/lib/stata` to `/lib/stata`. Included are utilities from the repo [`gslab_stata`](https://github.com/gslab-econ/gslab_stata).
 4. Copy setup script from `/extensions/stata/setup` to `/setup`.
-
-----
-
-### Adding Packages
-
-_Note_: These instructions are relevant for users who have installed `miniconda`. If you have not done so, consult `/setup/dependencies.md`.
-
-#### _Python_
-Add any required packages to `/setup/conda_env.yaml`. If possible add the package version number as well. If there is a package that is not available from `conda`, add this to the `pip` section of the `yaml` file. In order to not re-run the entire environment setup you can download these individual files from `conda` with the command:
-
-```
-conda install -c conda-forge --name <environment name> <package_name=version_number>
-```
-#### _R_
-Add any required packages that are available via `CRAN` to `/setup/conda_env.yaml`. These must be prepended with `r-`. If there is a package that is only available from `GitHub` and not from `CRAN`, add this package to `/setup/setup_r.r` (after copying this script from `/extensions`). These individual packages can be added in the same way as `Python` packages above (with the `r-` prepend). _Note that you may need to install the latest version of `conda` as outlined in the setup instructions above to properly load packages_.
-
-**For Apple Silicon users:** R packages will automatically compile from source if needed. This may take longer but ensures native ARM64 compatibility.
-
-#### _Stata_
-
-Install `Stata` dependencies using `/setup/download_stata_ado.do` (copy `download_stata_ado.do` from `/extensions` to `/setup` first). We keep all non-base `Stata` ado files in the `lib` subdirectory, so most non-base `Stata` ado files will be versioned. To add additional `Stata` dependencies, use the following `bash` command from the `setup` subdirectory:
-
-```
-stata-mp -e download_stata_ado.do
-```
-
-#### _Julia_
-
-First, add any required Julia packages to `julia_conda_env.jl`. Follow the same steps described in **[Setup](#setup)** to build and activate your `conda` environment, being sure to _uncomment the line referencing `julia` in `/setup/conda_env.yaml`_ before building the environment. Once the environment is activated, run the following line from the `/setup` directory:
-
-```
-julia julia_conda_env.jl
-```
-
-Then, ensure any Julia scripts are properly referenced in the relevant `make.py` scripts with the prefix `gs.run_julia`, and proceed to run `run_all.py`.
 
 ----
 

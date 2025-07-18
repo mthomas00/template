@@ -32,4 +32,23 @@ dependencies:
   - r-SnowballC
   - r-snakecase
   - r-tidytext
+  - r-bdsmatrix
+  - r-survival
+  - r-rematch
+  - r-readxl
+  - r-backports
+  - r-crayon
+  - r-cowplot
+  - r-MASS
+  - r-peakRAM
+  - r-remotes
+  - r-broom
+  - r-ggforce
+  - r-ggplotify
+  - r-ggstance
+  - r-gridExtra
+  - r-lazyeval
+  - r-patchwork
+  - r-ggtext
+  - r-brms
 
