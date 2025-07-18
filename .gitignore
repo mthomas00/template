@@ -9,6 +9,9 @@
 !*paper_slides/external/
 !*paper_slides/input/
 
+# Locally-installed R packages
+lib/r/external_packages
+
 # `/temp/` subdirectories are ignored as they are temporary by design
 *temp/
 

@@ -1,9 +1,5 @@
-.libPaths('') # Cleanup any additional paths the user might have
-.libPaths('lib/r') # Packages will be installed in this location
-
 main <- function() {
-  .libPaths('') # Cleanup any additional paths the user might have
-  .libPaths('lib/r') # Packages will be installed in this location
+  .libPaths('lib/r/external_packages') # Packages will be installed in this location
   
   # Detect Apple Silicon
   is_apple_silicon <- Sys.info()["machine"] == "arm64" && Sys.info()["sysname"] == "Darwin"
@@ -14,7 +10,7 @@ main <- function() {
     repos <- "https://cran.rstudio.com/"
   } else {
     cat("Detected x86_64 architecture - using standard installation\n")
-    repos <- "https://cran.csie.ntu.edu.tw/"
+    repos <- "https://mirror.its.umich.edu/cran/"
   }
   
   # List of CRAN packages to install
@@ -27,26 +23,26 @@ main <- function() {
       install.packages(CRAN_packages, 
                        repos = repos,
                        dependencies = TRUE, 
-                       lib = 'lib/r',
+                       lib = 'lib/r/external_packages/',
                        type = "source") # Use source installation for better ARM64 compatibility
     } else {
       # Standard installation for x86_64
       install.packages(CRAN_packages, 
                        repos = repos,
                        dependencies = TRUE, 
-                       lib = 'lib/r')
+                       lib = 'lib/r/external_packages/')
     }
   }
   
   # Install GitHub packages
   if (!require(remotes, quietly = TRUE)) {
-    install.packages("remotes", repos = repos, lib = 'lib/r')
+    install.packages("remotes", repos = repos, lib = 'lib/r/external_packages')
   }
   library(remotes)
   
   # Install GitHub packages with platform detection
   tryCatch({
-    install_github("NightingaleHealth/ggforestplot", force = TRUE, lib = 'lib/r')
+    install_github("NightingaleHealth/ggforestplot", force = TRUE, lib = 'lib/r/external_packages')
   }, error = function(e) {
     cat("Warning: Could not install ggforestplot from GitHub. This may be due to platform compatibility.\n")
     cat("Error:", e$message, "\n")
@@ -62,8 +58,3 @@ cat("Architecture:", Sys.info()["machine"], "\n")
 cat("Operating System:", Sys.info()["sysname"], "\n")
 cat("R Version:", R.version$version.string, "\n")
 cat("Library Paths:", .libPaths(), "\n")
-
-# # library(devtools)
-# devtools::install_github("NightingaleHealth/ggforestplot")
-
-# renv::snapshot()

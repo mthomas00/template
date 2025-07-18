@@ -1,6 +1,6 @@
 
-R version 4.1.3 (2022-03-10) -- "One Push-Up"
-Copyright (C) 2022 The R Foundation for Statistical Computing
+R version 4.3.3 (2024-02-29) -- "Angel Food Cake"
+Copyright (C) 2024 The R Foundation for Statistical Computing
 Platform: x86_64-apple-darwin13.4.0 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -17,26 +17,170 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> .libPaths('') # Cleanup any additional paths the user might have
-> .libPaths('../lib/R') # Packages will be installed in this location
-> 
 > main <- function() {
-+   .libPaths('') # Cleanup any additional paths the user might have
-+   .libPaths('../lib/r') # Packages will be installed in this location
-+   #List of CRAN packages to install
-+   CRAN_packages   <- c("data.table", "Rcpp", "fst", "ggplot2", "fixest", "zoo", "stringr", "readxl", 
-+     "fwildclusterboot", "RcppRoll", "future", "forestplot", "tidyr", "ggplot2", "RcppEigen",
-+     "future.apply", 
-+     "rlang", "vctrs", "glue", "magrittr", "cli", "fansi", "utf8", "tibble", "purrr", "dplyr",
-+     "colorspace", "backports", "lazyeval", "stringi") 
-+   install.packages(CRAN_packages, repos = "https://cran.csie.ntu.edu.tw/",
-+                    dependencies=TRUE, lib='../lib/r') #Download packages to {root}/lib/r/*
++   .libPaths('lib/r/external_packages') # Packages will be installed in this location
++   
++   # Detect Apple Silicon
++   is_apple_silicon <- Sys.info()["machine"] == "arm64" && Sys.info()["sysname"] == "Darwin"
++   
++   if (is_apple_silicon) {
++     cat("Detected Apple Silicon (ARM64) - using native installation\n")
++     # Use CRAN mirror that supports ARM64
++     repos <- "https://cran.rstudio.com/"
++   } else {
++     cat("Detected x86_64 architecture - using standard installation\n")
++     repos <- "https://mirror.its.umich.edu/cran/"
++   }
++   
++   # List of CRAN packages to install
++   CRAN_packages <- NULL
++   
++   # Install packages with platform-specific options
++   if (!is.null(CRAN_packages) && length(CRAN_packages) > 0) {
++     if (is_apple_silicon) {
++       # For Apple Silicon, install with specific options
++       install.packages(CRAN_packages, 
++                        repos = repos,
++                        dependencies = TRUE, 
++                        lib = 'lib/r/external_packages/',
++                        type = "source") # Use source installation for better ARM64 compatibility
++     } else {
++       # Standard installation for x86_64
++       install.packages(CRAN_packages, 
++                        repos = repos,
++                        dependencies = TRUE, 
++                        lib = 'lib/r/external_packages/')
++     }
++   }
++   
++   # Install GitHub packages
++   if (!require(remotes, quietly = TRUE)) {
++     install.packages("remotes", repos = repos, lib = 'lib/r/external_packages')
++   }
++   library(remotes)
++   
++   # Install GitHub packages with platform detection
++   tryCatch({
++     install_github("NightingaleHealth/ggforestplot", force = TRUE, lib = 'lib/r/external_packages')
++   }, error = function(e) {
++     cat("Warning: Could not install ggforestplot from GitHub. This may be due to platform compatibility.\n")
++     cat("Error:", e$message, "\n")
++   })
 + }
 > 
 > main()
-Warning in install.packages(CRAN_packages, repos = "https://cran.csie.ntu.edu.tw/",  :
-  'lib = "../lib/r"' is not writable
-Error in install.packages(CRAN_packages, repos = "https://cran.csie.ntu.edu.tw/",  : 
-  unable to install packages
-Calls: main -> install.packages
-Execution halted
+Detected x86_64 architecture - using standard installation
+Using GitHub PAT from the git credential store.
+Downloading GitHub repo NightingaleHealth/ggforestplot@HEAD
+jsonlite (1.9.1 -> 2.0.0) [CRAN]
+Installing 1 packages: jsonlite
+trying URL 'https://cloud.r-project.org/src/contrib/jsonlite_2.0.0.tar.gz'
+Content type 'application/x-gzip' length 1055849 bytes (1.0 MB)
+==================================================
+downloaded 1.0 MB
+
+* installing *source* package ‘jsonlite’ ...
+** package ‘jsonlite’ successfully unpacked and MD5 sums checked
+** using staged installation
+** libs
+using C compiler: ‘clang version 20.1.8’
+using SDK: ‘MacOSX15.5.sdk’
+x86_64-apple-darwin13.4.0-clang -I"/Users/mt4bq/.conda/envs/template/lib/R/include" -DNDEBUG -Iyajl/api  -D_FORTIFY_SOURCE=2 -isystem /Users/mt4bq/.conda/envs/template/include -mmacosx-version-min=10.13 -mmacosx-version-min=10.13 -I/Users/mt4bq/.conda/envs/template/include     -fPIC  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -isystem /Users/mt4bq/.conda/envs/template/include -fdebug-prefix-map=/Users/runner/miniforge3/conda-bld/r-base-split_1734346537426/work=/usr/local/src/conda/r-base-4.3.3 -fdebug-prefix-map=/Users/mt4bq/.conda/envs/template=/usr/local/src/conda-prefix  -c base64.c -o base64.o
+x86_64-apple-darwin13.4.0-clang -I"/Users/mt4bq/.conda/envs/template/lib/R/include" -DNDEBUG -Iyajl/api  -D_FORTIFY_SOURCE=2 -isystem /Users/mt4bq/.conda/envs/template/include -mmacosx-version-min=10.13 -mmacosx-version-min=10.13 -I/Users/mt4bq/.conda/envs/template/include     -fPIC  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -isystem /Users/mt4bq/.conda/envs/template/include -fdebug-prefix-map=/Users/runner/miniforge3/conda-bld/r-base-split_1734346537426/work=/usr/local/src/conda/r-base-4.3.3 -fdebug-prefix-map=/Users/mt4bq/.conda/envs/template=/usr/local/src/conda-prefix  -c collapse_array.c -o collapse_array.o
+x86_64-apple-darwin13.4.0-clang -I"/Users/mt4bq/.conda/envs/template/lib/R/include" -DNDEBUG -Iyajl/api  -D_FORTIFY_SOURCE=2 -isystem /Users/mt4bq/.conda/envs/template/include -mmacosx-version-min=10.13 -mmacosx-version-min=10.13 -I/Users/mt4bq/.conda/envs/template/include     -fPIC  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -isystem /Users/mt4bq/.conda/envs/template/include -fdebug-prefix-map=/Users/runner/miniforge3/conda-bld/r-base-split_1734346537426/work=/usr/local/src/conda/r-base-4.3.3 -fdebug-prefix-map=/Users/mt4bq/.conda/envs/template=/usr/local/src/conda-prefix  -c collapse_object.c -o collapse_object.o
+x86_64-apple-darwin13.4.0-clang -I"/Users/mt4bq/.conda/envs/template/lib/R/include" -DNDEBUG -Iyajl/api  -D_FORTIFY_SOURCE=2 -isystem /Users/mt4bq/.conda/envs/template/include -mmacosx-version-min=10.13 -mmacosx-version-min=10.13 -I/Users/mt4bq/.conda/envs/template/include     -fPIC  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -isystem /Users/mt4bq/.conda/envs/template/include -fdebug-prefix-map=/Users/runner/miniforge3/conda-bld/r-base-split_1734346537426/work=/usr/local/src/conda/r-base-4.3.3 -fdebug-prefix-map=/Users/mt4bq/.conda/envs/template=/usr/local/src/conda-prefix  -c collapse_pretty.c -o collapse_pretty.o
+x86_64-apple-darwin13.4.0-clang -I"/Users/mt4bq/.conda/envs/template/lib/R/include" -DNDEBUG -Iyajl/api  -D_FORTIFY_SOURCE=2 -isystem /Users/mt4bq/.conda/envs/template/include -mmacosx-version-min=10.13 -mmacosx-version-min=10.13 -I/Users/mt4bq/.conda/envs/template/include     -fPIC  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -isystem /Users/mt4bq/.conda/envs/template/include -fdebug-prefix-map=/Users/runner/miniforge3/conda-bld/r-base-split_1734346537426/work=/usr/local/src/conda/r-base-4.3.3 -fdebug-prefix-map=/Users/mt4bq/.conda/envs/template=/usr/local/src/conda-prefix  -c escape_chars.c -o escape_chars.o
+x86_64-apple-darwin13.4.0-clang -I"/Users/mt4bq/.conda/envs/template/lib/R/include" -DNDEBUG -Iyajl/api  -D_FORTIFY_SOURCE=2 -isystem /Users/mt4bq/.conda/envs/template/include -mmacosx-version-min=10.13 -mmacosx-version-min=10.13 -I/Users/mt4bq/.conda/envs/template/include     -fPIC  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -isystem /Users/mt4bq/.conda/envs/template/include -fdebug-prefix-map=/Users/runner/miniforge3/conda-bld/r-base-split_1734346537426/work=/usr/local/src/conda/r-base-4.3.3 -fdebug-prefix-map=/Users/mt4bq/.conda/envs/template=/usr/local/src/conda-prefix  -c integer64_to_na.c -o integer64_to_na.o
+x86_64-apple-darwin13.4.0-clang -I"/Users/mt4bq/.conda/envs/template/lib/R/include" -DNDEBUG -Iyajl/api  -D_FORTIFY_SOURCE=2 -isystem /Users/mt4bq/.conda/envs/template/include -mmacosx-version-min=10.13 -mmacosx-version-min=10.13 -I/Users/mt4bq/.conda/envs/template/include     -fPIC  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -isystem /Users/mt4bq/.conda/envs/template/include -fdebug-prefix-map=/Users/runner/miniforge3/conda-bld/r-base-split_1734346537426/work=/usr/local/src/conda/r-base-4.3.3 -fdebug-prefix-map=/Users/mt4bq/.conda/envs/template=/usr/local/src/conda-prefix  -c is_datelist.c -o is_datelist.o
+x86_64-apple-darwin13.4.0-clang -I"/Users/mt4bq/.conda/envs/template/lib/R/include" -DNDEBUG -Iyajl/api  -D_FORTIFY_SOURCE=2 -isystem /Users/mt4bq/.conda/envs/template/include -mmacosx-version-min=10.13 -mmacosx-version-min=10.13 -I/Users/mt4bq/.conda/envs/template/include     -fPIC  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -isystem /Users/mt4bq/.conda/envs/template/include -fdebug-prefix-map=/Users/runner/miniforge3/conda-bld/r-base-split_1734346537426/work=/usr/local/src/conda/r-base-4.3.3 -fdebug-prefix-map=/Users/mt4bq/.conda/envs/template=/usr/local/src/conda-prefix  -c is_recordlist.c -o is_recordlist.o
+x86_64-apple-darwin13.4.0-clang -I"/Users/mt4bq/.conda/envs/template/lib/R/include" -DNDEBUG -Iyajl/api  -D_FORTIFY_SOURCE=2 -isystem /Users/mt4bq/.conda/envs/template/include -mmacosx-version-min=10.13 -mmacosx-version-min=10.13 -I/Users/mt4bq/.conda/envs/template/include     -fPIC  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -isystem /Users/mt4bq/.conda/envs/template/include -fdebug-prefix-map=/Users/runner/miniforge3/conda-bld/r-base-split_1734346537426/work=/usr/local/src/conda/r-base-4.3.3 -fdebug-prefix-map=/Users/mt4bq/.conda/envs/template=/usr/local/src/conda-prefix  -c is_scalarlist.c -o is_scalarlist.o
+x86_64-apple-darwin13.4.0-clang -I"/Users/mt4bq/.conda/envs/template/lib/R/include" -DNDEBUG -Iyajl/api  -D_FORTIFY_SOURCE=2 -isystem /Users/mt4bq/.conda/envs/template/include -mmacosx-version-min=10.13 -mmacosx-version-min=10.13 -I/Users/mt4bq/.conda/envs/template/include     -fPIC  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -isystem /Users/mt4bq/.conda/envs/template/include -fdebug-prefix-map=/Users/runner/miniforge3/conda-bld/r-base-split_1734346537426/work=/usr/local/src/conda/r-base-4.3.3 -fdebug-prefix-map=/Users/mt4bq/.conda/envs/template=/usr/local/src/conda-prefix  -c modp_numtoa.c -o modp_numtoa.o
+x86_64-apple-darwin13.4.0-clang -I"/Users/mt4bq/.conda/envs/template/lib/R/include" -DNDEBUG -Iyajl/api  -D_FORTIFY_SOURCE=2 -isystem /Users/mt4bq/.conda/envs/template/include -mmacosx-version-min=10.13 -mmacosx-version-min=10.13 -I/Users/mt4bq/.conda/envs/template/include     -fPIC  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -isystem /Users/mt4bq/.conda/envs/template/include -fdebug-prefix-map=/Users/runner/miniforge3/conda-bld/r-base-split_1734346537426/work=/usr/local/src/conda/r-base-4.3.3 -fdebug-prefix-map=/Users/mt4bq/.conda/envs/template=/usr/local/src/conda-prefix  -c null_to_na.c -o null_to_na.o
+x86_64-apple-darwin13.4.0-clang -I"/Users/mt4bq/.conda/envs/template/lib/R/include" -DNDEBUG -Iyajl/api  -D_FORTIFY_SOURCE=2 -isystem /Users/mt4bq/.conda/envs/template/include -mmacosx-version-min=10.13 -mmacosx-version-min=10.13 -I/Users/mt4bq/.conda/envs/template/include     -fPIC  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -isystem /Users/mt4bq/.conda/envs/template/include -fdebug-prefix-map=/Users/runner/miniforge3/conda-bld/r-base-split_1734346537426/work=/usr/local/src/conda/r-base-4.3.3 -fdebug-prefix-map=/Users/mt4bq/.conda/envs/template=/usr/local/src/conda-prefix  -c num_to_char.c -o num_to_char.o
+x86_64-apple-darwin13.4.0-clang -I"/Users/mt4bq/.conda/envs/template/lib/R/include" -DNDEBUG -Iyajl/api  -D_FORTIFY_SOURCE=2 -isystem /Users/mt4bq/.conda/envs/template/include -mmacosx-version-min=10.13 -mmacosx-version-min=10.13 -I/Users/mt4bq/.conda/envs/template/include     -fPIC  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -isystem /Users/mt4bq/.conda/envs/template/include -fdebug-prefix-map=/Users/runner/miniforge3/conda-bld/r-base-split_1734346537426/work=/usr/local/src/conda/r-base-4.3.3 -fdebug-prefix-map=/Users/mt4bq/.conda/envs/template=/usr/local/src/conda-prefix  -c parse.c -o parse.o
+x86_64-apple-darwin13.4.0-clang -I"/Users/mt4bq/.conda/envs/template/lib/R/include" -DNDEBUG -Iyajl/api  -D_FORTIFY_SOURCE=2 -isystem /Users/mt4bq/.conda/envs/template/include -mmacosx-version-min=10.13 -mmacosx-version-min=10.13 -I/Users/mt4bq/.conda/envs/template/include     -fPIC  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -isystem /Users/mt4bq/.conda/envs/template/include -fdebug-prefix-map=/Users/runner/miniforge3/conda-bld/r-base-split_1734346537426/work=/usr/local/src/conda/r-base-4.3.3 -fdebug-prefix-map=/Users/mt4bq/.conda/envs/template=/usr/local/src/conda-prefix  -c prettify.c -o prettify.o
+x86_64-apple-darwin13.4.0-clang -I"/Users/mt4bq/.conda/envs/template/lib/R/include" -DNDEBUG -Iyajl/api  -D_FORTIFY_SOURCE=2 -isystem /Users/mt4bq/.conda/envs/template/include -mmacosx-version-min=10.13 -mmacosx-version-min=10.13 -I/Users/mt4bq/.conda/envs/template/include     -fPIC  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -isystem /Users/mt4bq/.conda/envs/template/include -fdebug-prefix-map=/Users/runner/miniforge3/conda-bld/r-base-split_1734346537426/work=/usr/local/src/conda/r-base-4.3.3 -fdebug-prefix-map=/Users/mt4bq/.conda/envs/template=/usr/local/src/conda-prefix  -c push_parser.c -o push_parser.o
+x86_64-apple-darwin13.4.0-clang -I"/Users/mt4bq/.conda/envs/template/lib/R/include" -DNDEBUG -Iyajl/api  -D_FORTIFY_SOURCE=2 -isystem /Users/mt4bq/.conda/envs/template/include -mmacosx-version-min=10.13 -mmacosx-version-min=10.13 -I/Users/mt4bq/.conda/envs/template/include     -fPIC  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -isystem /Users/mt4bq/.conda/envs/template/include -fdebug-prefix-map=/Users/runner/miniforge3/conda-bld/r-base-split_1734346537426/work=/usr/local/src/conda/r-base-4.3.3 -fdebug-prefix-map=/Users/mt4bq/.conda/envs/template=/usr/local/src/conda-prefix  -c r-base64.c -o r-base64.o
+x86_64-apple-darwin13.4.0-clang -I"/Users/mt4bq/.conda/envs/template/lib/R/include" -DNDEBUG -Iyajl/api  -D_FORTIFY_SOURCE=2 -isystem /Users/mt4bq/.conda/envs/template/include -mmacosx-version-min=10.13 -mmacosx-version-min=10.13 -I/Users/mt4bq/.conda/envs/template/include     -fPIC  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -isystem /Users/mt4bq/.conda/envs/template/include -fdebug-prefix-map=/Users/runner/miniforge3/conda-bld/r-base-split_1734346537426/work=/usr/local/src/conda/r-base-4.3.3 -fdebug-prefix-map=/Users/mt4bq/.conda/envs/template=/usr/local/src/conda-prefix  -c register.c -o register.o
+x86_64-apple-darwin13.4.0-clang -I"/Users/mt4bq/.conda/envs/template/lib/R/include" -DNDEBUG -Iyajl/api  -D_FORTIFY_SOURCE=2 -isystem /Users/mt4bq/.conda/envs/template/include -mmacosx-version-min=10.13 -mmacosx-version-min=10.13 -I/Users/mt4bq/.conda/envs/template/include     -fPIC  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -isystem /Users/mt4bq/.conda/envs/template/include -fdebug-prefix-map=/Users/runner/miniforge3/conda-bld/r-base-split_1734346537426/work=/usr/local/src/conda/r-base-4.3.3 -fdebug-prefix-map=/Users/mt4bq/.conda/envs/template=/usr/local/src/conda-prefix  -c row_collapse.c -o row_collapse.o
+x86_64-apple-darwin13.4.0-clang -I"/Users/mt4bq/.conda/envs/template/lib/R/include" -DNDEBUG -Iyajl/api  -D_FORTIFY_SOURCE=2 -isystem /Users/mt4bq/.conda/envs/template/include -mmacosx-version-min=10.13 -mmacosx-version-min=10.13 -I/Users/mt4bq/.conda/envs/template/include     -fPIC  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -isystem /Users/mt4bq/.conda/envs/template/include -fdebug-prefix-map=/Users/runner/miniforge3/conda-bld/r-base-split_1734346537426/work=/usr/local/src/conda/r-base-4.3.3 -fdebug-prefix-map=/Users/mt4bq/.conda/envs/template=/usr/local/src/conda-prefix  -c transpose_list.c -o transpose_list.o
+x86_64-apple-darwin13.4.0-clang -I"/Users/mt4bq/.conda/envs/template/lib/R/include" -DNDEBUG -Iyajl/api  -D_FORTIFY_SOURCE=2 -isystem /Users/mt4bq/.conda/envs/template/include -mmacosx-version-min=10.13 -mmacosx-version-min=10.13 -I/Users/mt4bq/.conda/envs/template/include     -fPIC  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -isystem /Users/mt4bq/.conda/envs/template/include -fdebug-prefix-map=/Users/runner/miniforge3/conda-bld/r-base-split_1734346537426/work=/usr/local/src/conda/r-base-4.3.3 -fdebug-prefix-map=/Users/mt4bq/.conda/envs/template=/usr/local/src/conda-prefix  -c validate.c -o validate.o
+x86_64-apple-darwin13.4.0-clang -I"/Users/mt4bq/.conda/envs/template/lib/R/include" -DNDEBUG -Iyajl/api  -D_FORTIFY_SOURCE=2 -isystem /Users/mt4bq/.conda/envs/template/include -mmacosx-version-min=10.13 -mmacosx-version-min=10.13 -I/Users/mt4bq/.conda/envs/template/include     -fPIC  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -isystem /Users/mt4bq/.conda/envs/template/include -fdebug-prefix-map=/Users/runner/miniforge3/conda-bld/r-base-split_1734346537426/work=/usr/local/src/conda/r-base-4.3.3 -fdebug-prefix-map=/Users/mt4bq/.conda/envs/template=/usr/local/src/conda-prefix  -c yajl/yajl.c -o yajl/yajl.o
+x86_64-apple-darwin13.4.0-clang -I"/Users/mt4bq/.conda/envs/template/lib/R/include" -DNDEBUG -Iyajl/api  -D_FORTIFY_SOURCE=2 -isystem /Users/mt4bq/.conda/envs/template/include -mmacosx-version-min=10.13 -mmacosx-version-min=10.13 -I/Users/mt4bq/.conda/envs/template/include     -fPIC  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -isystem /Users/mt4bq/.conda/envs/template/include -fdebug-prefix-map=/Users/runner/miniforge3/conda-bld/r-base-split_1734346537426/work=/usr/local/src/conda/r-base-4.3.3 -fdebug-prefix-map=/Users/mt4bq/.conda/envs/template=/usr/local/src/conda-prefix  -c yajl/yajl_alloc.c -o yajl/yajl_alloc.o
+x86_64-apple-darwin13.4.0-clang -I"/Users/mt4bq/.conda/envs/template/lib/R/include" -DNDEBUG -Iyajl/api  -D_FORTIFY_SOURCE=2 -isystem /Users/mt4bq/.conda/envs/template/include -mmacosx-version-min=10.13 -mmacosx-version-min=10.13 -I/Users/mt4bq/.conda/envs/template/include     -fPIC  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -isystem /Users/mt4bq/.conda/envs/template/include -fdebug-prefix-map=/Users/runner/miniforge3/conda-bld/r-base-split_1734346537426/work=/usr/local/src/conda/r-base-4.3.3 -fdebug-prefix-map=/Users/mt4bq/.conda/envs/template=/usr/local/src/conda-prefix  -c yajl/yajl_buf.c -o yajl/yajl_buf.o
+x86_64-apple-darwin13.4.0-clang -I"/Users/mt4bq/.conda/envs/template/lib/R/include" -DNDEBUG -Iyajl/api  -D_FORTIFY_SOURCE=2 -isystem /Users/mt4bq/.conda/envs/template/include -mmacosx-version-min=10.13 -mmacosx-version-min=10.13 -I/Users/mt4bq/.conda/envs/template/include     -fPIC  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -isystem /Users/mt4bq/.conda/envs/template/include -fdebug-prefix-map=/Users/runner/miniforge3/conda-bld/r-base-split_1734346537426/work=/usr/local/src/conda/r-base-4.3.3 -fdebug-prefix-map=/Users/mt4bq/.conda/envs/template=/usr/local/src/conda-prefix  -c yajl/yajl_encode.c -o yajl/yajl_encode.o
+x86_64-apple-darwin13.4.0-clang -I"/Users/mt4bq/.conda/envs/template/lib/R/include" -DNDEBUG -Iyajl/api  -D_FORTIFY_SOURCE=2 -isystem /Users/mt4bq/.conda/envs/template/include -mmacosx-version-min=10.13 -mmacosx-version-min=10.13 -I/Users/mt4bq/.conda/envs/template/include     -fPIC  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -isystem /Users/mt4bq/.conda/envs/template/include -fdebug-prefix-map=/Users/runner/miniforge3/conda-bld/r-base-split_1734346537426/work=/usr/local/src/conda/r-base-4.3.3 -fdebug-prefix-map=/Users/mt4bq/.conda/envs/template=/usr/local/src/conda-prefix  -c yajl/yajl_gen.c -o yajl/yajl_gen.o
+x86_64-apple-darwin13.4.0-clang -I"/Users/mt4bq/.conda/envs/template/lib/R/include" -DNDEBUG -Iyajl/api  -D_FORTIFY_SOURCE=2 -isystem /Users/mt4bq/.conda/envs/template/include -mmacosx-version-min=10.13 -mmacosx-version-min=10.13 -I/Users/mt4bq/.conda/envs/template/include     -fPIC  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -isystem /Users/mt4bq/.conda/envs/template/include -fdebug-prefix-map=/Users/runner/miniforge3/conda-bld/r-base-split_1734346537426/work=/usr/local/src/conda/r-base-4.3.3 -fdebug-prefix-map=/Users/mt4bq/.conda/envs/template=/usr/local/src/conda-prefix  -c yajl/yajl_lex.c -o yajl/yajl_lex.o
+x86_64-apple-darwin13.4.0-clang -I"/Users/mt4bq/.conda/envs/template/lib/R/include" -DNDEBUG -Iyajl/api  -D_FORTIFY_SOURCE=2 -isystem /Users/mt4bq/.conda/envs/template/include -mmacosx-version-min=10.13 -mmacosx-version-min=10.13 -I/Users/mt4bq/.conda/envs/template/include     -fPIC  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -isystem /Users/mt4bq/.conda/envs/template/include -fdebug-prefix-map=/Users/runner/miniforge3/conda-bld/r-base-split_1734346537426/work=/usr/local/src/conda/r-base-4.3.3 -fdebug-prefix-map=/Users/mt4bq/.conda/envs/template=/usr/local/src/conda-prefix  -c yajl/yajl_parser.c -o yajl/yajl_parser.o
+x86_64-apple-darwin13.4.0-clang -I"/Users/mt4bq/.conda/envs/template/lib/R/include" -DNDEBUG -Iyajl/api  -D_FORTIFY_SOURCE=2 -isystem /Users/mt4bq/.conda/envs/template/include -mmacosx-version-min=10.13 -mmacosx-version-min=10.13 -I/Users/mt4bq/.conda/envs/template/include     -fPIC  -march=core2 -mtune=haswell -mssse3 -ftree-vectorize -fPIC -fstack-protector-strong -O2 -pipe -isystem /Users/mt4bq/.conda/envs/template/include -fdebug-prefix-map=/Users/runner/miniforge3/conda-bld/r-base-split_1734346537426/work=/usr/local/src/conda/r-base-4.3.3 -fdebug-prefix-map=/Users/mt4bq/.conda/envs/template=/usr/local/src/conda-prefix  -c yajl/yajl_tree.c -o yajl/yajl_tree.o
+x86_64-apple-darwin13.4.0-ar rcs yajl/libstatyajl.a yajl/yajl.o yajl/yajl_alloc.o yajl/yajl_buf.o yajl/yajl_encode.o yajl/yajl_gen.o yajl/yajl_lex.o yajl/yajl_parser.o yajl/yajl_tree.o
+x86_64-apple-darwin13.4.0-clang -dynamiclib -Wl,-headerpad_max_install_names -undefined dynamic_lookup -single_module -multiply_defined suppress -L/Users/mt4bq/.conda/envs/template/lib/R/lib -Wl,-dead_strip_dylibs -Wl,-headerpad_max_install_names -Wl,-dead_strip_dylibs -Wl,-rpath,/Users/mt4bq/.conda/envs/template/lib -L/Users/mt4bq/.conda/envs/template/lib -o jsonlite.dylib base64.o collapse_array.o collapse_object.o collapse_pretty.o escape_chars.o integer64_to_na.o is_datelist.o is_recordlist.o is_scalarlist.o modp_numtoa.o null_to_na.o num_to_char.o parse.o prettify.o push_parser.o r-base64.o register.o row_collapse.o transpose_list.o validate.o -Lyajl -lstatyajl -L/Users/mt4bq/.conda/envs/template/lib/R/lib -lR -Wl,-framework -Wl,CoreFoundation
+installing to /Users/mt4bq/Library/CloudStorage/OneDrive-UniversityofMissouri/Documents/gitprojects/template/lib/r/external_packages/00LOCK-jsonlite/00new/jsonlite/libs
+** R
+** inst
+** byte-compile and prepare package for lazy loading
+in method for ‘asJSON’ with signature ‘"AsIs"’: no definition for class “AsIs”
+in method for ‘asJSON’ with signature ‘"ITime"’: no definition for class “ITime”
+in method for ‘asJSON’ with signature ‘"hms"’: no definition for class “hms”
+in method for ‘asJSON’ with signature ‘"json"’: no definition for class “json”
+in method for ‘asJSON’ with signature ‘"integer64"’: no definition for class “integer64”
+in method for ‘asJSON’ with signature ‘"pairlist"’: no definition for class “pairlist”
+in method for ‘asJSON’ with signature ‘"blob"’: no definition for class “blob”
+in method for ‘asJSON’ with signature ‘"scalar"’: no definition for class “scalar”
+in method for ‘asJSON’ with signature ‘"sf"’: no definition for class “sf”
+in method for ‘asJSON’ with signature ‘"sfc"’: no definition for class “sfc”
+in method for ‘asJSON’ with signature ‘"vctrs_vctr"’: no definition for class “vctrs_vctr”
+** help
+*** installing help indices
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded from temporary location
+** checking absolute paths in shared objects and dynamic libraries
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (jsonlite)
+
+The downloaded source packages are in
+	‘/private/var/folders/z9/1q7q9ymn0l16_1s9ytxfb2mr0000gp/T/RtmpOoY4Uc/downloaded_packages’
+── R CMD build ─────────────────────────────────────────────────────────────────
+* checking for file ‘/private/var/folders/z9/1q7q9ymn0l16_1s9ytxfb2mr0000gp/T/RtmpOoY4Uc/remotesb5e3576a70f/NightingaleHealth-ggforestplot-547617e/DESCRIPTION’ ... OK
+* preparing ‘ggforestplot’:
+* checking DESCRIPTION meta-information ... OK
+* checking for LF line-endings in source and make files and shell scripts
+* checking for empty or unneeded directories
+* building ‘ggforestplot_0.1.0.tar.gz’
+
+* installing *source* package ‘ggforestplot’ ...
+** using staged installation
+** R
+** data
+*** moving datasets to lazyload DB
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+*** copying figures
+** building package indices
+** installing vignettes
+** testing if installed package can be loaded from temporary location
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (ggforestplot)
+> 
+> # Print session info for debugging
+> cat("\n=== R Session Info ===\n")
+
+=== R Session Info ===
+> cat("Platform:", R.version$platform, "\n")
+Platform: x86_64-apple-darwin13.4.0 
+> cat("Architecture:", Sys.info()["machine"], "\n")
+Architecture: x86_64 
+> cat("Operating System:", Sys.info()["sysname"], "\n")
+Operating System: Darwin 
+> cat("R Version:", R.version$version.string, "\n")
+R Version: R version 4.3.3 (2024-02-29) 
+> cat("Library Paths:", .libPaths(), "\n")
+Library Paths: /Users/mt4bq/Library/CloudStorage/OneDrive-UniversityofMissouri/Documents/gitprojects/template/lib/r/external_packages /Users/mt4bq/.conda/envs/template/lib/R/library 
+> 
+> proc.time()
+   user  system elapsed 
+ 13.647   3.542  32.096 
