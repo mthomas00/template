@@ -1,9 +1,9 @@
 .libPaths('') # Cleanup any additional paths the user might have
-.libPaths('../lib/R') # Packages will be installed in this location
+.libPaths('lib/r') # Packages will be installed in this location
 
 main <- function() {
   .libPaths('') # Cleanup any additional paths the user might have
-  .libPaths('../lib/r') # Packages will be installed in this location
+  .libPaths('lib/r') # Packages will be installed in this location
   
   # Detect Apple Silicon
   is_apple_silicon <- Sys.info()["machine"] == "arm64" && Sys.info()["sysname"] == "Darwin"
@@ -18,41 +18,35 @@ main <- function() {
   }
   
   # List of CRAN packages to install
-  CRAN_packages <- c(
-    "data.table", "Rcpp", "fst", "ggplot2", "fixest", "zoo", "stringr", "readxl", 
-    "fwildclusterboot", "RcppRoll", "future", "forestplot", "tidyr", "RcppEigen",
-    "future.apply", "rlang", "vctrs", "glue", "magrittr", "cli", "fansi", "utf8", 
-    "tibble", "purrr", "dplyr", "colorspace", "backports", "lazyeval", "stringi",
-    "bit", "bit64", "R.utils", "readr", "R.methodsS3", "R.oo", "fastcluster",
-    "reticulate", "lfe", "lightgbm", "sentimentr", "scales", "plyr", "tm", 
-    "SnowballC", "textshape", "snakecase", "tidytext"
-  )
+  CRAN_packages <- NULL
   
   # Install packages with platform-specific options
-  if (is_apple_silicon) {
-    # For Apple Silicon, install with specific options
-    install.packages(CRAN_packages, 
-                     repos = repos,
-                     dependencies = TRUE, 
-                     lib = '../lib/r',
-                     type = "source") # Use source installation for better ARM64 compatibility
-  } else {
-    # Standard installation for x86_64
-    install.packages(CRAN_packages, 
-                     repos = repos,
-                     dependencies = TRUE, 
-                     lib = '../lib/r')
+  if (!is.null(CRAN_packages) && length(CRAN_packages) > 0) {
+    if (is_apple_silicon) {
+      # For Apple Silicon, install with specific options
+      install.packages(CRAN_packages, 
+                       repos = repos,
+                       dependencies = TRUE, 
+                       lib = 'lib/r',
+                       type = "source") # Use source installation for better ARM64 compatibility
+    } else {
+      # Standard installation for x86_64
+      install.packages(CRAN_packages, 
+                       repos = repos,
+                       dependencies = TRUE, 
+                       lib = 'lib/r')
+    }
   }
   
   # Install GitHub packages
   if (!require(remotes, quietly = TRUE)) {
-    install.packages("remotes", repos = repos, lib = '../lib/r')
+    install.packages("remotes", repos = repos, lib = 'lib/r')
   }
   library(remotes)
   
   # Install GitHub packages with platform detection
   tryCatch({
-    install_github("NightingaleHealth/ggforestplot", force = TRUE, lib = '../lib/r')
+    install_github("NightingaleHealth/ggforestplot", force = TRUE, lib = 'lib/r')
   }, error = function(e) {
     cat("Warning: Could not install ggforestplot from GitHub. This may be due to platform compatibility.\n")
     cat("Error:", e$message, "\n")
